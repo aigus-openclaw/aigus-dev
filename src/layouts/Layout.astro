@@ -1,13 +1,14 @@
 ---
-export interface Props {
+interface Props {
   title?: string;
   description?: string;
 }
 const {
-  title = 'Agustín Bernardo',
-  description = 'Agustín Bernardo — Lead AI/ML Engineer. Senior AI Software Engineer at Superhuman. Physicist.',
+  title = "Agustín Bernardo",
+  description = "Agustín Bernardo — Lead AI/ML Engineer. Senior AI Software Engineer at Superhuman. Physicist.",
 } = Astro.props;
 ---
+
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -15,7 +16,7 @@ const {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   <title>{title}</title>
-  <style>
+  <style is:global>
     /* === RESET === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -86,7 +87,7 @@ const {
       align-items: center;
       height: 56px;
     }
-    .nav-brand { font-weight: 700; font-size: 0.95rem; color: var(--muted); text-decoration: none; }
+    .nav-brand { font-weight: 700; font-size: 0.95rem; color: var(--muted); }
     .nav-brand span { color: var(--accent); }
 
     .nav-links {
@@ -105,7 +106,7 @@ const {
     }
     .nav-links a:hover { color: var(--text); background: var(--accent-dim); }
     .nav-links a.active { color: var(--accent); }
-    @media (max-width: 540px) { .nav-links a:not(.blog-link) { display: none; } }
+    @media (max-width: 540px) { .nav-links a:not(.nav-blog) { display: none; } }
 
     .theme-toggle {
       background: none;
@@ -284,6 +285,58 @@ const {
     .pub-title { font-size: 0.925rem; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
     .pub-venue { font-size: 0.8rem; color: var(--muted); }
 
+    /* === BLOG INDEX === */
+    .post-list { display: flex; flex-direction: column; gap: 12px; }
+    .post-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: color 0.15s;
+    }
+    .post-item:last-child { border-bottom: none; }
+    .post-item:hover { color: var(--accent); text-decoration: none; }
+    .post-item:hover .post-title { color: var(--accent); }
+    .post-title { font-size: 1rem; font-weight: 600; }
+    .post-date { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+
+    /* === BLOG POST === */
+    .prose { max-width: 660px; }
+    .prose h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; }
+    .prose h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+    .prose p { color: var(--muted); margin-bottom: 1.2rem; line-height: 1.8; }
+    .prose strong { color: var(--text); }
+    .prose a { color: var(--accent); }
+    .prose ul, .prose ol { color: var(--muted); padding-left: 1.5rem; margin-bottom: 1.2rem; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose blockquote {
+      border-left: 3px solid var(--accent-border);
+      padding-left: 1rem;
+      color: var(--muted);
+      font-style: italic;
+      margin: 1.5rem 0;
+    }
+    .prose code {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.875em;
+    }
+    .prose pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      overflow-x: auto;
+      margin-bottom: 1.2rem;
+    }
+    .prose pre code { background: none; border: none; padding: 0; }
+
     /* === FOOTER === */
     footer {
       padding: 36px 0 48px;
@@ -321,6 +374,18 @@ const {
 
   <div class="container">
     <slot />
+
+    <footer>
+      <span class="footer-note">Built by AIgus 🤖 — Agus's loyal claw.</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/bagustin" target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+    </footer>
   </div>
 
   <script>
@@ -335,13 +400,11 @@ const {
     }
 
     applyTheme(stored ?? (prefersDark.matches ? 'dark' : 'light'));
-
     btn.addEventListener('click', () => {
       const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       localStorage.setItem('theme', next);
       applyTheme(next);
     });
-
     prefersDark.addEventListener('change', e => {
       if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light');
     });
@@ -357,7 +420,7 @@ const {
 
     // Active nav link on scroll
     const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const navLinks = document.querySelectorAll('.nav-links a');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
