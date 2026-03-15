@@ -1,0 +1,373 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'Agustín Bernardo',
+  description = 'Agustín Bernardo — Lead AI/ML Engineer. Senior AI Software Engineer at Superhuman. Physicist.',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <style>
+    /* === RESET === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* === THEME TOKENS === */
+    :root {
+      color-scheme: dark;
+      --bg: #090e13;
+      --surface: #0f1923;
+      --accent: #4ade80;
+      --accent-dim: rgba(74, 222, 128, 0.08);
+      --accent-border: rgba(74, 222, 128, 0.18);
+      --text: #e6edf3;
+      --muted: #7d8590;
+      --border: rgba(255, 255, 255, 0.07);
+      --radius: 8px;
+    }
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #fafafa;
+      --surface: #f0f4f1;
+      --accent: #16a34a;
+      --accent-dim: rgba(22, 163, 74, 0.07);
+      --accent-border: rgba(22, 163, 74, 0.22);
+      --text: #111827;
+      --muted: #4b5563;
+      --border: rgba(0, 0, 0, 0.08);
+    }
+
+    /* === BASE === */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      transition: background 0.2s, color 0.2s;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* === LAYOUT === */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+    section:last-of-type { border-bottom: none; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    /* === HEADER === */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.2s;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 56px;
+    }
+    .nav-brand { font-weight: 700; font-size: 0.95rem; color: var(--muted); text-decoration: none; }
+    .nav-brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 5px 8px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--accent-dim); }
+    .nav-links a.active { color: var(--accent); }
+    @media (max-width: 540px) { .nav-links a:not(.blog-link) { display: none; } }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      color: var(--muted);
+      transition: border-color 0.2s, color 0.2s;
+      margin-left: 8px;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* === HERO === */
+    .hero {
+      padding: 96px 0 80px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(74,222,128,0.10) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
+      pointer-events: none;
+    }
+    [data-theme="light"] .hero::before {
+      background-image: radial-gradient(circle, rgba(22,163,74,0.12) 1px, transparent 1px);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(74,222,128,0.09) 0%, transparent 70%);
+      pointer-events: none;
+      animation: orb-drift 8s ease-in-out infinite alternate;
+    }
+    [data-theme="light"] .hero::after {
+      background: radial-gradient(circle, rgba(22,163,74,0.08) 0%, transparent 70%);
+    }
+    @keyframes orb-drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.08); }
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--accent); }
+      50%       { opacity: 0.5; box-shadow: 0 0 2px var(--accent); }
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 9vw, 5.5rem);
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--text) 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    [data-theme="light"] .hero h1 {
+      background: linear-gradient(135deg, #111827 40%, #16a34a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.75;
+    }
+    .hero-subtitle strong { color: var(--text); font-weight: 500; }
+    .aigus-callout {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+      position: relative;
+      animation: callout-in 0.6s ease 0.2s both;
+    }
+    @keyframes callout-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .aigus-callout::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: calc(var(--radius) + 1px);
+      background: linear-gradient(135deg, var(--accent-border), transparent 60%);
+      z-index: -1;
+    }
+    .aigus-callout .bot { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* === ABOUT === */
+    .about p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.75;
+    }
+    .about p:last-child { margin-bottom: 0; }
+    .about strong { color: var(--text); font-weight: 600; }
+
+    /* === EXPERIENCE / EDUCATION === */
+    .exp-list { display: flex; flex-direction: column; gap: 36px; }
+    .exp-item {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 0 24px;
+    }
+    @media (max-width: 500px) { .exp-item { grid-template-columns: 1fr; gap: 4px; } }
+    .exp-date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 4px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .exp-role { font-weight: 700; font-size: 0.975rem; margin-bottom: 3px; }
+    .exp-company { font-size: 0.85rem; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
+    .exp-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* === RESEARCH === */
+    .research-intro {
+      font-size: 0.975rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.75;
+    }
+    .research-intro strong { color: var(--text); }
+    .pub-list { display: flex; flex-direction: column; gap: 12px; }
+    .pub-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      transition: border-color 0.2s;
+    }
+    .pub-item:hover { border-color: var(--accent-border); }
+    .pub-year { font-size: 0.72rem; color: var(--accent); font-weight: 700; margin-bottom: 5px; letter-spacing: 0.05em; }
+    .pub-title { font-size: 0.925rem; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+    .pub-venue { font-size: 0.8rem; color: var(--muted); }
+
+    /* === FOOTER === */
+    footer {
+      padding: 36px 0 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-note { font-size: 0.78rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="/" class="nav-brand">aigus<span>.dev</span></a>
+        <div class="nav-links">
+          <slot name="nav-links" />
+          <button class="theme-toggle" id="themeBtn" aria-label="Toggle theme">☀︎ light</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <slot />
+  </div>
+
+  <script>
+    const btn = document.getElementById('themeBtn');
+    const html = document.documentElement;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const stored = localStorage.getItem('theme');
+
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      btn.textContent = theme === 'dark' ? '☀︎ light' : '☾ dark';
+    }
+
+    applyTheme(stored ?? (prefersDark.matches ? 'dark' : 'light'));
+
+    btn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+    });
+
+    prefersDark.addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light');
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
