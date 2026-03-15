@@ -82,18 +82,20 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
     }
     .nav-links a {
       font-size: 0.82rem;
       color: var(--muted);
-      padding: 5px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
       transition: color 0.15s, background 0.15s;
       text-decoration: none;
+      white-space: nowrap;
     }
     .nav-links a:hover { color: var(--text); background: var(--accent-dim); }
     .nav-links a.active { color: var(--accent); }
+    @media (max-width: 540px) { .nav-links a { display: none; } }
 
     .theme-toggle {
       background: none;
@@ -178,7 +180,7 @@
     }
 
     .hero h1 {
-      font-size: clamp(3rem, 9vw, 5.5rem);
+      font-size: clamp(2.4rem, 9vw, 5.5rem);
       letter-spacing: -0.03em;
       line-height: 1.0;
       margin-bottom: 24px;
